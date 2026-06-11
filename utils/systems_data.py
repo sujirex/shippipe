@@ -3,8 +3,6 @@ Marine piping system reference data.
 Pipe schedules per ASME B36.10, materials per class society guidelines.
 """
 
-# ── Standard pipe sizes (NPS → OD mm, then schedules → wall thickness mm) ──
-# OD values per ASME B36.10M
 PIPE_SIZES = {
     "DN15 (1/2\")":   {"OD": 21.3,  "schedules": {"SCH 40": 2.77, "SCH 80": 3.73, "SCH 160": 4.78}},
     "DN20 (3/4\")":   {"OD": 26.7,  "schedules": {"SCH 40": 2.87, "SCH 80": 3.91, "SCH 160": 5.56}},
@@ -16,59 +14,67 @@ PIPE_SIZES = {
     "DN80 (3\")":     {"OD": 88.9,  "schedules": {"SCH 40": 5.49, "SCH 80": 7.62, "SCH 160": 11.13}},
     "DN100 (4\")":    {"OD": 114.3, "schedules": {"SCH 40": 6.02, "SCH 80": 8.56, "SCH 160": 13.49}},
     "DN125 (5\")":    {"OD": 141.3, "schedules": {"SCH 40": 6.55, "SCH 80": 9.53, "SCH 160": 15.88}},
-    "DN150 (6\")":    {"OD": 168.3, "schedules": {"SCH 40": 7.11, "SCH 80": 10.97, "SCH 160": 18.26}},
-    "DN200 (8\")":    {"OD": 219.1, "schedules": {"SCH 40": 8.18, "SCH 80": 12.70, "SCH 160": 23.01}},
-    "DN250 (10\")":   {"OD": 273.1, "schedules": {"SCH 40": 9.27, "SCH 80": 15.09, "SCH 160": 28.58}},
-    "DN300 (12\")":   {"OD": 323.9, "schedules": {"SCH 40": 10.31,"SCH 80": 17.48, "SCH 160": 33.32}},
-    "DN350 (14\")":   {"OD": 355.6, "schedules": {"SCH 40": 11.13,"SCH 80": 19.05, "SCH 160": 35.71}},
-    "DN400 (16\")":   {"OD": 406.4, "schedules": {"SCH 40": 12.70,"SCH 80": 21.44, "SCH 160": 40.49}},
-    "DN450 (18\")":   {"OD": 457.2, "schedules": {"SCH 40": 14.27,"SCH 80": 23.83, "SCH 160": 45.24}},
-    "DN500 (20\")":   {"OD": 508.0, "schedules": {"SCH 40": 15.09,"SCH 80": 26.19, "SCH 160": 50.01}},
+    "DN150 (6\")":    {"OD": 168.3, "schedules": {"SCH 40": 7.11, "SCH 80": 10.97,"SCH 160": 18.26}},
+    "DN200 (8\")":    {"OD": 219.1, "schedules": {"SCH 40": 8.18, "SCH 80": 12.70,"SCH 160": 23.01}},
+    "DN250 (10\")":   {"OD": 273.1, "schedules": {"SCH 40": 9.27, "SCH 80": 15.09,"SCH 160": 28.58}},
+    "DN300 (12\")":   {"OD": 323.9, "schedules": {"SCH 40": 10.31,"SCH 80": 17.48,"SCH 160": 33.32}},
+    "DN350 (14\")":   {"OD": 355.6, "schedules": {"SCH 40": 11.13,"SCH 80": 19.05,"SCH 160": 35.71}},
+    "DN400 (16\")":   {"OD": 406.4, "schedules": {"SCH 40": 12.70,"SCH 80": 21.44,"SCH 160": 40.49}},
+    "DN450 (18\")":   {"OD": 457.2, "schedules": {"SCH 40": 14.27,"SCH 80": 23.83,"SCH 160": 45.24}},
+    "DN500 (20\")":   {"OD": 508.0, "schedules": {"SCH 40": 15.09,"SCH 80": 26.19,"SCH 160": 50.01}},
 }
 
-# ── Fluid properties at ~25°C ──────────────────────────────────────────────
 FLUID_PROPERTIES = {
-    "Sea Water":    {"density": 1025, "viscosity": 1.07e-3, "roughness": 0.046},
-    "Fresh Water":  {"density": 998,  "viscosity": 1.00e-3, "roughness": 0.046},
-    "HFO":         {"density": 991,  "viscosity": 380e-3,  "roughness": 0.046},
-    "MDO/DO":      {"density": 870,  "viscosity": 4.5e-3,  "roughness": 0.046},
-    "Lube Oil":    {"density": 890,  "viscosity": 68e-3,   "roughness": 0.046},
+    "Sea Water":      {"density": 1025, "viscosity": 1.07e-3, "roughness": 0.046},
+    "Fresh Water":    {"density": 998,  "viscosity": 1.00e-3, "roughness": 0.046},
+    "HFO":            {"density": 991,  "viscosity": 380e-3,  "roughness": 0.046},
+    "MDO/DO":         {"density": 870,  "viscosity": 4.5e-3,  "roughness": 0.046},
+    "Lube Oil":       {"density": 880,  "viscosity": 68e-3,   "roughness": 0.046},
+    "Hydraulic Oil":  {"density": 870,  "viscosity": 46e-3,   "roughness": 0.046},
+    "Compressed Air": {"density": 8.5,  "viscosity": 1.8e-5,  "roughness": 0.046},
 }
 
-# ── Recommended flow velocities (m/s) ─────────────────────────────────────
 VELOCITY_RANGES = {
-    "Ballast":      {"fluid": "Sea Water",   "min": 1.5, "max": 3.0, "recommended": 2.0},
-    "Bilge":        {"fluid": "Sea Water",   "min": 1.0, "max": 2.5, "recommended": 1.8},
-    "Fuel Oil HFO": {"fluid": "HFO",         "min": 0.5, "max": 1.0, "recommended": 0.8},
-    "Fuel Oil MDO": {"fluid": "MDO/DO",      "min": 0.8, "max": 1.5, "recommended": 1.2},
-    "Fire & GS":    {"fluid": "Sea Water",   "min": 3.0, "max": 5.0, "recommended": 4.0},
-    "Fresh Water":  {"fluid": "Fresh Water", "min": 1.0, "max": 2.5, "recommended": 1.8},
-    "Cooling SW":   {"fluid": "Sea Water",   "min": 1.5, "max": 3.0, "recommended": 2.0},
-    "Cooling FW":   {"fluid": "Fresh Water", "min": 1.0, "max": 2.5, "recommended": 1.8},
+    "Ballast":        {"fluid": "Sea Water",      "min": 1.5,  "max": 3.0,  "recommended": 2.0},
+    "Bilge":          {"fluid": "Sea Water",      "min": 1.0,  "max": 2.5,  "recommended": 1.8},
+    "Fuel Oil HFO":   {"fluid": "HFO",            "min": 0.5,  "max": 1.0,  "recommended": 0.8},
+    "Fuel Oil MDO":   {"fluid": "MDO/DO",         "min": 0.8,  "max": 1.5,  "recommended": 1.2},
+    "Fire & GS":      {"fluid": "Sea Water",      "min": 3.0,  "max": 5.0,  "recommended": 4.0},
+    "Fresh Water":    {"fluid": "Fresh Water",    "min": 1.0,  "max": 2.5,  "recommended": 1.8},
+    "Cooling SW":     {"fluid": "Sea Water",      "min": 1.5,  "max": 3.0,  "recommended": 2.0},
+    "Cooling FW":     {"fluid": "Fresh Water",    "min": 1.0,  "max": 2.5,  "recommended": 1.8},
+    "Lube Oil":       {"fluid": "Lube Oil",       "min": 0.5,  "max": 1.5,  "recommended": 1.0},
+    "Hydraulic":      {"fluid": "Hydraulic Oil",  "min": 2.0,  "max": 4.0,  "recommended": 3.0},
+    "Compressed Air": {"fluid": "Compressed Air", "min": 8.0,  "max": 20.0, "recommended": 12.0},
+    "Sewage":         {"fluid": "Fresh Water",    "min": 0.6,  "max": 2.0,  "recommended": 1.2},
 }
 
-# ── Materials by system ─────────────────────────────────────────────────────
 MATERIALS = {
-    "Ballast":      {"material": "Carbon Steel (CS) + Epoxy Coating", "standard": "ASTM A53 / IS 1239", "note": "Hot-dip galvanized acceptable for smaller sizes"},
-    "Bilge":        {"material": "Carbon Steel Galvanized (GI)", "standard": "IS 1239 / BS 1387", "note": "GRP acceptable for non-machinery spaces"},
-    "Fuel Oil HFO": {"material": "Seamless Carbon Steel", "standard": "ASTM A106 Gr.B", "note": "Flanged joints only in machinery spaces - no screwed joints"},
-    "Fuel Oil MDO": {"material": "Seamless Carbon Steel", "standard": "ASTM A106 Gr.B", "note": "Flanged joints only in machinery spaces"},
-    "Fire & GS":    {"material": "Galvanized Iron (GI) / CS with coating", "standard": "IS 1239 / SOLAS Reg.", "note": "Fire main must be tested to 1.5× working pressure"},
-    "Fresh Water":  {"material": "Copper-Nickel 90/10 or SS 316", "standard": "ASTM B466 / ASTM A312", "note": "Avoid galvanized for potable water"},
-    "Cooling SW":   {"material": "Copper-Nickel 90/10 (Cu-Ni)", "standard": "ASTM B466", "note": "Cu-Ni preferred for sea water corrosion resistance"},
-    "Cooling FW":   {"material": "Carbon Steel (CS)", "standard": "ASTM A53", "note": "Closed circuit - CS acceptable with inhibitor treatment"},
+    "Ballast":        {"material": "Carbon Steel (CS) + Epoxy Coating",  "standard": "ASTM A53 / IS 1239",  "note": "Hot-dip galvanized acceptable for smaller sizes"},
+    "Bilge":          {"material": "Carbon Steel Galvanized (GI)",        "standard": "IS 1239 / BS 1387",   "note": "GRP acceptable for non-machinery spaces"},
+    "Fuel Oil HFO":   {"material": "Seamless Carbon Steel",              "standard": "ASTM A106 Gr.B",      "note": "Flanged joints only in machinery spaces - no screwed joints"},
+    "Fuel Oil MDO":   {"material": "Seamless Carbon Steel",              "standard": "ASTM A106 Gr.B",      "note": "Flanged joints only in machinery spaces"},
+    "Fire & GS":      {"material": "Galvanized Iron (GI) / CS + coating","standard": "IS 1239 / SOLAS Reg.","note": "Fire main tested to 1.5x working pressure"},
+    "Fresh Water":    {"material": "Copper-Nickel 90/10 or SS 316",      "standard": "ASTM B466 / A312",    "note": "Avoid galvanized for potable water"},
+    "Cooling SW":     {"material": "Copper-Nickel 90/10 (Cu-Ni)",        "standard": "ASTM B466",           "note": "Cu-Ni preferred for sea water corrosion resistance"},
+    "Cooling FW":     {"material": "Carbon Steel (CS)",                  "standard": "ASTM A53",            "note": "Closed circuit - CS acceptable with inhibitor treatment"},
+    "Lube Oil":       {"material": "Seamless Carbon Steel",              "standard": "ASTM A106 Gr.B",      "note": "Insulate in cold spaces; drain points at all low spots"},
+    "Hydraulic":      {"material": "Seamless Carbon Steel / SS 316",     "standard": "ASTM A106 / A312",    "note": "High-pressure lines: use SCH 80 minimum; avoid flex hose except at actuators"},
+    "Compressed Air": {"material": "Seamless Carbon Steel",              "standard": "ASTM A106 Gr.B",      "note": "Starting air: SCH 80 minimum at 30 bar; drain legs at all low points"},
+    "Sewage":         {"material": "GRP / uPVC / GI",                    "standard": "ISO 8099 / MARPOL IV","note": "Overboard discharge valve with locking - MARPOL Annex IV compliant"},
 }
 
-# ── Schedule recommendation by system working pressure ─────────────────────
 def recommended_schedule(system: str, pressure_bar: float) -> str:
+    if system == "Compressed Air" and pressure_bar > 20:
+        return "SCH 160"
+    if system == "Hydraulic" or pressure_bar > 20:
+        return "SCH 80"
     if pressure_bar <= 10:
         return "SCH 40"
     elif pressure_bar <= 20:
         return "SCH 80"
-    else:
-        return "SCH 160"
+    return "SCH 160"
 
-# ── BOM component lists by system ──────────────────────────────────────────
 SYSTEM_COMPONENTS = {
     "Ballast": [
         ("Sea Chest (Low)", 1, "set", "Cast iron / bronze body, grating"),
@@ -80,7 +86,6 @@ SYSTEM_COMPONENTS = {
         ("Gate Valve (Isolation)", 8, "no.", "CS/CI, flanged, PN16"),
         ("Butterfly Valve (Tank Suction)", 6, "no.", "CS, lug type, PN16"),
         ("Non-Return Valve (NRV)", 4, "no.", "Swing check, flanged"),
-        ("Gate Valve (Tank Vent)", 4, "no.", "CS, flanged"),
         ("Air Pipe Head", 6, "no.", "Weathertight, self-closing"),
         ("Sounding Pipe with Cock", 6, "no.", "With self-closing device"),
         ("Pressure Gauge", 4, "no.", "0-10 bar, glycerin filled"),
@@ -120,9 +125,8 @@ SYSTEM_COMPONENTS = {
         ("Fuel Oil Purifier", 2, "no.", "Centrifugal disc type"),
         ("Sludge Pump", 1, "no.", "For purifier sludge"),
         ("Pressure Gauge", 6, "no.", "0-16 bar, glycerin"),
-        ("Temperature Gauge", 4, "no.", "0-200°C"),
+        ("Temperature Gauge", 4, "no.", "0-200 deg C"),
         ("Pipe Supports / Hangers", 1, "lot", "Insulated as required"),
-        ("Flanged Joints (all)", 1, "lot", "No screwed joints in machinery spaces"),
     ],
     "Fuel Oil MDO": [
         ("MDO Storage Tank Valve", 2, "no.", "Quick-closing, remote operated"),
@@ -157,7 +161,7 @@ SYSTEM_COMPONENTS = {
         ("FW Generator (Evaporator)", 1, "no.", "Plate type, IMO certified"),
         ("FW Storage Tank Valve", 4, "no.", "Gate valve, SS/GI"),
         ("FW Transfer Pump", 2, "no.", "Centrifugal"),
-        ("FW Hydrophore Unit (Pressure Pump)", 1, "set", "With pressure vessel & controls"),
+        ("FW Hydrophore Unit", 1, "set", "With pressure vessel & controls"),
         ("FW Chlorinator / UV Sterilizer", 1, "no.", "SOLAS compliant"),
         ("FW Filter (Activated Carbon)", 1, "no.", "For potable water"),
         ("FW Flow Meter", 1, "no.", "Volumetric"),
@@ -165,7 +169,6 @@ SYSTEM_COMPONENTS = {
         ("FW Non-Return Valve", 4, "no.", "Swing check, SS"),
         ("Air Pipe Head (FW Tank)", 2, "no.", "Weathertight"),
         ("Sounding Pipe with Cock", 2, "no.", "With self-closing device"),
-        ("FW Analysis Kit Connection", 1, "set", "Sampling point"),
         ("Pressure Gauge", 4, "no.", "0-10 bar"),
         ("Pipe Supports / Hangers", 1, "lot", ""),
     ],
@@ -188,12 +191,78 @@ SYSTEM_COMPONENTS = {
         ("FW Expansion Tank", 1, "no.", "With level gauge & alarm"),
         ("3-Way Temperature Control Valve", 2, "no.", "Automatic, thermostat controlled"),
         ("FW Cooling Heater (Preheater)", 1, "no.", "Steam or electric"),
-        ("Pressure Cap / Deaerator", 1, "no.", "For closed circuit"),
         ("Inhibitor Dosing Pump", 1, "no.", "Corrosion inhibitor injection"),
         ("FW Temperature Sensor", 4, "no.", "Inlet/outlet per cooler"),
         ("Pressure Gauge", 4, "no.", "0-6 bar"),
         ("Non-Return Valve", 2, "no.", "Swing check"),
         ("Isolating Valve", 6, "no.", "Gate valve, CS"),
         ("Pipe Supports / Hangers", 1, "lot", ""),
+    ],
+    "Lube Oil": [
+        ("LO Sump Tank Valve", 2, "no.", "Gate valve, CS, flanged"),
+        ("LO Pump (Main Engine)", 2, "no.", "Gear pump, main & standby"),
+        ("LO Pump (Aux Engine)", 2, "no.", "Gear pump per aux engine"),
+        ("LO Duplex Filter", 2, "set", "10 micron, duplex, by-pass type"),
+        ("LO Cooler", 2, "no.", "Plate heat exchanger"),
+        ("LO Temperature Control Valve", 2, "no.", "3-way, thermostatic"),
+        ("LO Purifier", 1, "no.", "Centrifugal disc separator"),
+        ("LO Purifier Feed Pump", 1, "no.", "Gear pump, heated"),
+        ("LO Pressure Control Valve", 2, "no.", "Self-actuating"),
+        ("LO Pressure Gauge", 6, "no.", "0-10 bar, glycerin filled"),
+        ("LO Temperature Gauge", 4, "no.", "0-150 deg C"),
+        ("LO Low Pressure Alarm Switch", 2, "no.", "Trips engine on low LO pressure"),
+        ("LO Sample Cock", 4, "no.", "For oil analysis sampling"),
+        ("Pipe Supports / Hangers", 1, "lot", "Insulate in cold spaces"),
+    ],
+    "Hydraulic": [
+        ("Hydraulic Power Unit (HPU)", 1, "set", "Tank + pump + motor + controls"),
+        ("Hydraulic Pump (Main)", 2, "no.", "Gear or vane pump, main & standby"),
+        ("Hydraulic Filter (High Pressure)", 2, "set", "10 micron absolute, duplex"),
+        ("Hydraulic Filter (Return)", 1, "no.", "10 micron, tank return"),
+        ("Hydraulic Accumulator", 2, "no.", "Bladder type, nitrogen charged"),
+        ("Pressure Relief Valve", 4, "no.", "Direct-acting, set at system pressure"),
+        ("Pressure Reducing Valve", 2, "no.", "For low-pressure circuits"),
+        ("Directional Control Valve (DCV)", 4, "no.", "4/3 solenoid operated"),
+        ("Flow Control Valve", 4, "no.", "Needle valve, adjustable"),
+        ("Non-Return Valve", 6, "no.", "Poppet type, high pressure"),
+        ("Hydraulic Cylinder / Actuator", 2, "no.", "As per equipment"),
+        ("Hydraulic Oil Cooler", 1, "no.", "Air-cooled or water-cooled"),
+        ("Oil Level Gauge (Tank)", 1, "no.", "With level alarm"),
+        ("Pressure Gauge (High Side)", 4, "no.", "0-400 bar, Bourdon tube"),
+        ("Flexible Hose (at actuators)", 4, "no.", "High-pressure rated, SAE 100R2"),
+        ("Pipe Supports / Hangers", 1, "lot", "All rigid lines clamped"),
+    ],
+    "Compressed Air": [
+        ("Main Air Compressor", 2, "no.", "Starting air, 30 bar, main & standby"),
+        ("Control Air Compressor", 2, "no.", "7 bar, instrument / control air"),
+        ("Starting Air Reservoir", 2, "no.", "30 bar, with safety valve & drain"),
+        ("Control Air Reservoir", 1, "no.", "7 bar, with safety valve"),
+        ("Air Dryer (Refrigerated)", 1, "no.", "For instrument / control air"),
+        ("Air Filter / Coalescer", 2, "set", "Pre & after dryer"),
+        ("Pressure Reducing Valve (30>7 bar)", 2, "no.", "For service air from starting air"),
+        ("Pressure Safety Valve", 4, "no.", "Set at 1.1x working pressure"),
+        ("Auto Drain Valve", 6, "no.", "Per reservoir and low points"),
+        ("Pressure Gauge", 6, "no.", "0-40 bar (starting) / 0-10 bar (control)"),
+        ("Isolating Valve (Ball)", 8, "no.", "CS, full-bore, rated pressure"),
+        ("Non-Return Valve", 4, "no.", "For compressor discharge"),
+        ("Pressure Switch (Low Alarm)", 2, "no.", "Starting air low pressure alarm"),
+        ("Air Main Service Outlets", 1, "lot", "Quick-connect couplings throughout ship"),
+        ("Pipe Supports / Hangers", 1, "lot", ""),
+    ],
+    "Sewage": [
+        ("Sewage Treatment Plant (STP)", 1, "no.", "MARPOL Annex IV, IMO certified"),
+        ("Sewage Collection Tank", 1, "no.", "Black water holding tank"),
+        ("Grey Water Collection Tank", 1, "no.", "Wash water holding tank"),
+        ("Sewage Pump (Transfer)", 2, "no.", "Self-priming, macerator type"),
+        ("Sewage Pump (Discharge)", 1, "no.", "For overboard / to shore"),
+        ("Macerator / Grinder", 1, "no.", "Inline, before STP inlet"),
+        ("Overboard Discharge Valve", 2, "no.", "Lockable - MARPOL locking device"),
+        ("Shore Connection (Sewage)", 1, "no.", "Standard shore reception coupling"),
+        ("Vent Pipe with Odour Filter", 4, "no.", "Carbon filter, weathertight head"),
+        ("Non-Return Valve", 2, "no.", "On discharge line"),
+        ("Level Alarm (High)", 2, "no.", "Per tank - bridge alarm"),
+        ("Pressure Gauge", 2, "no.", "0-6 bar"),
+        ("Inspection Access / Clean-out", 4, "no.", "Per line change of direction"),
+        ("Pipe Supports / Hangers", 1, "lot", "Self-draining gradient min 1:50"),
     ],
 }
