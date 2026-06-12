@@ -293,13 +293,37 @@ caption, .stCaption {{ color: {T["text2"]} !important; }}
 
 footer {{ visibility: hidden; }}
 #MainMenu {{ visibility: hidden; }}
-/* Hide Streamlit's top colour decoration bar */
-[data-testid="stDecoration"] {{ display: none !important; }}
-/* Hide the top-right header toolbar */
-[data-testid="stToolbar"] {{ right: 0; top: 0; }}
-header[data-testid="stHeader"] {{
-  background: {T["bg"]} !important;
-  border-bottom: 1px solid {T["border"]};
+/* ── Remove Streamlit native header entirely ── */
+header[data-testid="stHeader"] {{ display: none !important; }}
+[data-testid="stDecoration"]   {{ display: none !important; }}
+[data-testid="stToolbar"]      {{ display: none !important; }}
+/* Pull content to top now that header is gone */
+.main .block-container {{ padding-top: 0.8rem !important; }}
+
+/* ── File uploader cleanup ── */
+[data-testid="stFileUploaderDropzone"] {{
+    border: 1.5px dashed {T["primary"]}55 !important;
+    border-radius: 10px !important;
+    background: {T["card"]} !important;
+    padding: 8px 10px !important;
+}}
+[data-testid="stFileUploaderDropzone"] button {{
+    background: linear-gradient(135deg, {T["primary"]}, {T["primary2"]}) !important;
+    color: {T["sel_text"]} !important;
+    border: none !important;
+    border-radius: 6px !important;
+    font-size: 0.76rem !important;
+    font-weight: 700 !important;
+    padding: 4px 12px !important;
+    font-family: 'Space Grotesk', sans-serif !important;
+}}
+/* Hide the duplicate drag-drop instruction span */
+[data-testid="stFileUploaderDropzoneInstructions"] span:first-child {{
+    display: none !important;
+}}
+[data-testid="stFileUploaderDropzoneInstructions"] small {{
+    font-size: 0.7rem !important;
+    color: {T["muted"]} !important;
 }}
 </style>
 """, unsafe_allow_html=True)
@@ -731,25 +755,25 @@ with tabs[13]:
 ### Systems (12 total)
 | # | System | Design Fluid | Velocity Range |
 |---|--------|-------------|----------------|
-| 1 | Ballast | Sea Water | 1.5 – 3.0 m/s |
-| 2 | Bilge | Sea Water | 1.0 – 2.5 m/s |
-| 3 | Fuel Oil HFO | Heavy Fuel Oil | 0.5 – 1.0 m/s |
-| 4 | Fuel Oil MDO | Marine Diesel Oil | 0.8 – 1.5 m/s |
-| 5 | Fire & GS | Sea Water | 3.0 – 5.0 m/s |
-| 6 | Fresh Water | Fresh Water | 1.0 – 2.5 m/s |
-| 7 | Cooling SW | Sea Water | 1.5 – 3.0 m/s |
-| 8 | Cooling FW | Fresh Water | 1.0 – 2.5 m/s |
-| 9 | Lube Oil | Lube Oil | 0.5 – 1.5 m/s |
-| 10 | Hydraulic | Hydraulic Oil | 2.0 – 4.0 m/s |
-| 11 | Compressed Air | Gas (7–30 bar) | 8.0 – 20.0 m/s |
-| 12 | Sewage | Fresh Water | 0.6 – 2.0 m/s |
+| 1 | Ballast | Sea Water | 1.5 - 3.0 m/s |
+| 2 | Bilge | Sea Water | 1.0 - 2.5 m/s |
+| 3 | Fuel Oil HFO | Heavy Fuel Oil | 0.5 - 1.0 m/s |
+| 4 | Fuel Oil MDO | Marine Diesel Oil | 0.8 - 1.5 m/s |
+| 5 | Fire & GS | Sea Water | 3.0 - 5.0 m/s |
+| 6 | Fresh Water | Fresh Water | 1.0 - 2.5 m/s |
+| 7 | Cooling SW | Sea Water | 1.5 - 3.0 m/s |
+| 8 | Cooling FW | Fresh Water | 1.0 - 2.5 m/s |
+| 9 | Lube Oil | Lube Oil | 0.5 - 1.5 m/s |
+| 10 | Hydraulic | Hydraulic Oil | 2.0 - 4.0 m/s |
+| 11 | Compressed Air | Gas (7-30 bar) | 8.0 - 20.0 m/s |
+| 12 | Sewage | Fresh Water | 0.6 - 2.0 m/s |
 
 ### Engineering References
-- Pipe schedules — **ASME B36.10M**
-- Pressure drop — **Darcy-Weisbach + Colebrook-White**
-- Fire & GS — **SOLAS II-2**
-- Sewage — **MARPOL Annex IV / ISO 8099**
-- Fuel oil systems — **SOLAS II-2 Reg. 4**
+- Pipe schedules -- **ASME B36.10M**
+- Pressure drop -- **Darcy-Weisbach + Colebrook-White**
+- Fire & GS -- **SOLAS II-2**
+- Sewage -- **MARPOL Annex IV / ISO 8099**
+- Fuel oil systems -- **SOLAS II-2 Reg. 4**
 
-[sujikumar.com](https://sujikumar.com) &nbsp;|&nbsp; [LinkedIn](https://linkedin.com/in/sujikumar)
+[sujikumar.com](https://sujikumar.com) |  [LinkedIn](https://linkedin.com/in/sujikumar)
     """)
