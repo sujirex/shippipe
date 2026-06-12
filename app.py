@@ -305,24 +305,31 @@ header[data-testid="stHeader"] {{ display: none !important; }}
     border-radius: 10px !important;
     background: {T["card"]} !important;
     padding: 8px 10px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}}
+[data-testid="stFileUploaderDropzoneInstructions"] {{
+    display: none !important;
+}}
+[data-testid="stFileUploaderDropzone"] section {{
+    display: none !important;
 }}
 [data-testid="stFileUploaderDropzone"] button {{
     background: linear-gradient(135deg, {T["primary"]}, {T["primary2"]}) !important;
     color: {T["sel_text"]} !important;
     border: none !important;
     border-radius: 6px !important;
-    font-size: 0.76rem !important;
     font-weight: 700 !important;
-    padding: 4px 12px !important;
+    padding: 4px 14px !important;
     font-family: 'Space Grotesk', sans-serif !important;
+    font-size: 0 !important;
 }}
-/* Hide all instruction text - keep only the button */
-[data-testid="stFileUploaderDropzoneInstructions"] {{
-    display: none !important;
-}}
-[data-testid="stFileUploaderDropzone"] small {{
-    font-size: 0.7rem !important;
-    color: {T["muted"]} !important;
+[data-testid="stFileUploaderDropzone"] button::after {{
+    content: "Browse File";
+    font-size: 0.76rem;
+    font-weight: 700;
+    font-family: 'Space Grotesk', sans-serif;
 }}
 </style>
 """, unsafe_allow_html=True)
