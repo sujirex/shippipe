@@ -293,6 +293,14 @@ caption, .stCaption {{ color: {T["text2"]} !important; }}
 
 footer {{ visibility: hidden; }}
 #MainMenu {{ visibility: hidden; }}
+/* Hide Streamlit's top colour decoration bar */
+[data-testid="stDecoration"] {{ display: none !important; }}
+/* Hide the top-right header toolbar */
+[data-testid="stToolbar"] {{ right: 0; top: 0; }}
+header[data-testid="stHeader"] {{
+  background: {T["bg"]} !important;
+  border-bottom: 1px solid {T["border"]};
+}}
 </style>
 """, unsafe_allow_html=True)
 
@@ -335,7 +343,7 @@ with st.sidebar:
     st.markdown(f'<div style="font-family:Space Grotesk,sans-serif;font-size:0.75rem;font-weight:700;'
                 f'color:{T["muted"]};text-transform:uppercase;letter-spacing:0.07em;'
                 f'margin:16px 0 6px;">Import Template</div>', unsafe_allow_html=True)
-    uploaded = st.file_uploader("Excel template", type=["xlsx"], label_visibility="collapsed")
+    uploaded = st.file_uploader("Vessel template (.xlsx)", type=["xlsx"])
     if uploaded:
         try:
             df_in = pd.read_excel(uploaded, sheet_name="Vessel Data")
@@ -672,22 +680,22 @@ def render_dashboard():
 
 
 # ── Page Header ────────────────────────────────────────────────────────────────
-hc1, hc2 = st.columns([1,14], gap="small")
-with hc1:
-    st.markdown(valve_svg(T["primary"], 54), unsafe_allow_html=True)
-with hc2:
-    st.markdown(
-        f'<div style="font-family:Space Grotesk,sans-serif;font-size:1.9rem;font-weight:900;'
-        f'color:{T["primary"]};line-height:1;margin-top:2px;letter-spacing:-0.02em;">'
-        f'ShipPipe</div>'
-        f'<div style="font-size:0.82rem;color:{T["text2"]};letter-spacing:0.02em;margin-top:2px;">'
-        f'Marine Piping System Designer &nbsp;·&nbsp; 12 Systems &nbsp;·&nbsp; '
-        f'Pipe Sizing &nbsp;·&nbsp; Pump Spec &nbsp;·&nbsp; BOM &nbsp;·&nbsp; Excel &amp; PDF Export'
-        f'</div>',
-        unsafe_allow_html=True
-    )
-st.markdown(f'<div style="height:1px;background:linear-gradient(90deg,{T["primary"]},transparent);'
-            f'margin:10px 0 18px;"></div>', unsafe_allow_html=True)
+st.markdown(
+    f'<div style="display:flex;align-items:center;gap:14px;padding:4px 0 10px;">'
+    f'  {valve_svg(T["primary"], 46)}'
+    f'  <div>'
+    f'    <div style="font-family:Space Grotesk,sans-serif;font-size:1.75rem;font-weight:900;'
+    f'         color:{T["primary"]};line-height:1.1;letter-spacing:-0.02em;">ShipPipe</div>'
+    f'    <div style="font-size:0.8rem;color:{T["text2"]};margin-top:2px;letter-spacing:0.01em;">'
+    f'      Marine Piping System Designer &nbsp;·&nbsp; 12 Systems &nbsp;·&nbsp; '
+    f'      Pipe Sizing · Pump Spec · BOM · Excel &amp; PDF Export'
+    f'    </div>'
+    f'  </div>'
+    f'</div>'
+    f'<div style="height:1px;background:linear-gradient(90deg,{T["primary"]}88,transparent);'
+    f'margin-bottom:16px;"></div>',
+    unsafe_allow_html=True
+)
 
 
 # ── Tabs ───────────────────────────────────────────────────────────────────────
