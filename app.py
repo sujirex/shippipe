@@ -331,12 +331,18 @@ header[data-testid="stHeader"] {{ display: none !important; }}
     color: {T["sel_text"]};
     display: block !important;
 }}
-/* Hide Streamlit toolbar and keyboard shortcuts icon */
+/* Hide ALL Streamlit chrome */
 [data-testid="stToolbar"] {{ display: none !important; }}
 [data-testid="stToolbarActions"] {{ display: none !important; }}
-.stToolbar {{ display: none !important; }}
-[data-testid="stHeader"] > div:last-child {{ display: none !important; }}
+[data-testid="stStatusWidget"] {{ display: none !important; }}
 button[data-testid="baseButton-header"] {{ display: none !important; }}
+/* Hide sidebar collapse/expand button */
+[data-testid="stSidebarCollapseButton"] {{ display: none !important; }}
+[data-testid="stSidebarCollapsedControl"] {{ display: none !important; }}
+button[aria-label="Collapse sidebar"] {{ display: none !important; }}
+button[aria-label="Expand sidebar"] {{ display: none !important; }}
+button[title="Collapse sidebar"] {{ display: none !important; }}
+button[title="Expand sidebar"] {{ display: none !important; }}
 </style>
 """, unsafe_allow_html=True)
 
