@@ -299,20 +299,19 @@ header[data-testid="stHeader"] {{ display: none !important; }}
 [data-testid="stToolbar"]      {{ display: none !important; }}
 .main .block-container {{ padding-top: 0.8rem !important; }}
 
-/* File uploader cleanup */
+/* File uploader - hide duplicate text, show single clean button */
 [data-testid="stFileUploaderDropzone"] {{
     border: 1.5px dashed {T["primary"]}55 !important;
     border-radius: 10px !important;
     background: {T["card"]} !important;
     padding: 8px 10px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
 }}
 [data-testid="stFileUploaderDropzoneInstructions"] {{
     display: none !important;
 }}
-[data-testid="stFileUploaderDropzone"] section {{
+[data-testid="stFileUploaderDropzone"] button span,
+[data-testid="stFileUploaderDropzone"] button p,
+[data-testid="stFileUploaderDropzone"] button div {{
     display: none !important;
 }}
 [data-testid="stFileUploaderDropzone"] button {{
@@ -320,17 +319,24 @@ header[data-testid="stHeader"] {{ display: none !important; }}
     color: {T["sel_text"]} !important;
     border: none !important;
     border-radius: 6px !important;
-    font-weight: 700 !important;
-    padding: 4px 14px !important;
+    padding: 5px 14px !important;
     font-family: 'Space Grotesk', sans-serif !important;
-    font-size: 0 !important;
+    min-width: 90px !important;
 }}
 [data-testid="stFileUploaderDropzone"] button::after {{
     content: "Browse File";
     font-size: 0.76rem;
     font-weight: 700;
     font-family: 'Space Grotesk', sans-serif;
+    color: {T["sel_text"]};
+    display: block !important;
 }}
+/* Hide Streamlit toolbar and keyboard shortcuts icon */
+[data-testid="stToolbar"] {{ display: none !important; }}
+[data-testid="stToolbarActions"] {{ display: none !important; }}
+.stToolbar {{ display: none !important; }}
+[data-testid="stHeader"] > div:last-child {{ display: none !important; }}
+button[data-testid="baseButton-header"] {{ display: none !important; }}
 </style>
 """, unsafe_allow_html=True)
 
