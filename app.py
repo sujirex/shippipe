@@ -21,19 +21,19 @@ from utils.export import to_excel, to_pdf
 from utils.systems_data import VELOCITY_RANGES, MATERIALS, recommended_schedule
 
 st.set_page_config(
-    page_title="ShipPipe — Marine Piping Designer",
-    page_icon="🎛️",
+    page_title="ShipPipe -- Marine Piping Designer",
+    page_icon="[V]",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
-# ── Session State ──────────────────────────────────────────────────────────────
+# -- Session State
 if "dark_mode" not in st.session_state:
     st.session_state.dark_mode = True
 if "system_results" not in st.session_state:
     st.session_state.system_results = {}
 
-# ── Gate Valve SVG (P&ID symbol) ───────────────────────────────────────────────
+# -- Gate Valve SVG (P&ID symbol)
 def valve_svg(color: str, size: int = 52) -> str:
     return f"""<svg width="{size}" height="{size}" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
   <line x1="0" y1="26" x2="8" y2="26" stroke="{color}" stroke-width="4" stroke-linecap="round"/>
@@ -47,7 +47,7 @@ def valve_svg(color: str, size: int = 52) -> str:
   <line x1="26" y1="0" x2="26" y2="10" stroke="{color}" stroke-width="1.8"/>
 </svg>"""
 
-# ── Theme ──────────────────────────────────────────────────────────────────────
+# -- Theme
 def get_theme():
     if st.session_state.dark_mode:
         return dict(
@@ -69,7 +69,7 @@ def get_theme():
             c1        = "#00d4ff",
             c2        = "#00e5a0",
             c3        = "#ff9f43",
-            mode_btn  = "☀️  Light Mode",
+            mode_btn  = "Light Mode",
         )
     return dict(
         bg        = "#f4f8fc",
@@ -90,12 +90,12 @@ def get_theme():
         c1        = "#0066cc",
         c2        = "#00875a",
         c3        = "#d4600a",
-        mode_btn  = "🌙  Dark Mode",
+        mode_btn  = "Dark Mode",
     )
 
 T = get_theme()
 
-# ── Global CSS ─────────────────────────────────────────────────────────────────
+# -- Global CSS
 st.markdown(f"""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
@@ -293,14 +293,13 @@ caption, .stCaption {{ color: {T["text2"]} !important; }}
 
 footer {{ visibility: hidden; }}
 #MainMenu {{ visibility: hidden; }}
-/* ── Remove Streamlit native header entirely ── */
+/* Remove Streamlit native header */
 header[data-testid="stHeader"] {{ display: none !important; }}
 [data-testid="stDecoration"]   {{ display: none !important; }}
 [data-testid="stToolbar"]      {{ display: none !important; }}
-/* Pull content to top now that header is gone */
 .main .block-container {{ padding-top: 0.8rem !important; }}
 
-/* ── File uploader cleanup ── */
+/* File uploader cleanup */
 [data-testid="stFileUploaderDropzone"] {{
     border: 1.5px dashed {T["primary"]}55 !important;
     border-radius: 10px !important;
@@ -317,11 +316,11 @@ header[data-testid="stHeader"] {{ display: none !important; }}
     padding: 4px 12px !important;
     font-family: 'Space Grotesk', sans-serif !important;
 }}
-/* Hide the duplicate drag-drop instruction span */
-[data-testid="stFileUploaderDropzoneInstructions"] span:first-child {{
+/* Hide all instruction text - keep only the button */
+[data-testid="stFileUploaderDropzoneInstructions"] {{
     display: none !important;
 }}
-[data-testid="stFileUploaderDropzoneInstructions"] small {{
+[data-testid="stFileUploaderDropzone"] small {{
     font-size: 0.7rem !important;
     color: {T["muted"]} !important;
 }}
@@ -329,7 +328,7 @@ header[data-testid="stHeader"] {{ display: none !important; }}
 """, unsafe_allow_html=True)
 
 
-# ── Sidebar ────────────────────────────────────────────────────────────────────
+# -- Sidebar
 with st.sidebar:
     st.markdown(
         f'<div style="display:flex;align-items:center;gap:12px;padding:8px 0 4px;">'
@@ -362,7 +361,7 @@ with st.sidebar:
                 f'color:{T["muted"]};text-transform:uppercase;letter-spacing:0.07em;'
                 f'margin:16px 0 6px;">Settings</div>', unsafe_allow_html=True)
     default_schedule = st.selectbox("Schedule", ["SCH 40","SCH 80","SCH 160"])
-    pump_efficiency  = st.slider("Pump η (%)", 60, 85, 72) / 100
+    pump_efficiency  = st.slider("Pump n (%)", 60, 85, 72) / 100
 
     st.markdown(f'<div style="font-family:Space Grotesk,sans-serif;font-size:0.75rem;font-weight:700;'
                 f'color:{T["muted"]};text-transform:uppercase;letter-spacing:0.07em;'
@@ -389,21 +388,17 @@ with st.sidebar:
     )
 
 
-# ── Velocity Gauge ─────────────────────────────────────────────────────────────
+# -- Velocity Gauge
 def velocity_gauge(v_actual, v_min, v_max, v_rec):
     bg = T["chart_bg"]
     tc = T["text"]
     fig, ax = plt.subplots(figsize=(4.5, 0.6))
     fig.patch.set_facecolor(bg); ax.set_facecolor(bg)
-    # track
     ax.barh(0, v_max*1.25, height=0.45,
             color="#0d1f3c" if st.session_state.dark_mode else "#dce8f5", left=0)
-    # safe band
     ax.barh(0, v_max-v_min, height=0.45, color=T["success"], left=v_min, alpha=0.28)
-    # actual
     color = T["primary"] if v_min<=v_actual<=v_max else T["danger"]
     ax.barh(0, v_actual, height=0.45, color=color, alpha=0.9)
-    # recommended marker
     ax.axvline(v_rec, color="#ffffff" if st.session_state.dark_mode else "#333",
                linewidth=1.6, linestyle="--", alpha=0.7)
     ax.set_xlim(0, v_max*1.25); ax.set_yticks([])
@@ -415,7 +410,7 @@ def velocity_gauge(v_actual, v_min, v_max, v_rec):
     return fig
 
 
-# ── System Renderer ────────────────────────────────────────────────────────────
+# -- System Renderer
 def render_system(system_key: str, system_label: str):
     vrange = VELOCITY_RANGES[system_key]
     fluid  = vrange["fluid"]
@@ -434,11 +429,11 @@ def render_system(system_key: str, system_label: str):
 
     with col1:
         st.markdown('<div class="sp-section-title">Flow Requirements</div>', unsafe_allow_html=True)
-        flow_rate   = st.number_input("Flow Rate (m³/h)", 0.5, 5000.0, default_flow, 5.0, key=f"{system_key}_flow")
+        flow_rate   = st.number_input("Flow Rate (m3/h)", 0.5, 5000.0, default_flow, 5.0, key=f"{system_key}_flow")
         pipe_length = st.number_input("Pipe Length (m)",  5.0, 500.0, 50.0, 5.0,  key=f"{system_key}_len")
         static_head = st.number_input("Static Head (m)",  0.0, 50.0,  8.0,  0.5,  key=f"{system_key}_head")
         velocity    = st.slider(
-            f"Velocity (m/s) · rec: {vrange['recommended']}",
+            f"Velocity (m/s) rec: {vrange['recommended']}",
             vrange["min"], vrange["max"], vrange["recommended"], 0.1,
             key=f"{system_key}_vel"
         )
@@ -500,7 +495,7 @@ def render_system(system_key: str, system_label: str):
         st.markdown(f"""
 | Parameter | Value |
 |:---|---:|
-| Flow Rate | {pump['flow_rate_m3h']} m³/h |
+| Flow Rate | {pump['flow_rate_m3h']} m3/h |
 | Total Head | {pump['total_head_m']} m |
 | Calc Power | {pump['motor_power_kw']} kW |
 | **Std Motor** | **{pump['recommended_motor_kw']} kW** |
@@ -518,7 +513,7 @@ def render_system(system_key: str, system_label: str):
     ec1, ec2 = st.columns(2)
     with ec1:
         st.download_button(
-            "📥 Excel Spec Sheet",
+            "Excel Spec Sheet",
             to_excel(pipe, pump, bom, system_label, vessel_name),
             f"ShipPipe_{system_key.replace(' ','_')}_{vessel_name.replace(' ','_')}.xlsx",
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -526,7 +521,7 @@ def render_system(system_key: str, system_label: str):
         )
     with ec2:
         st.download_button(
-            "📄 PDF Spec Sheet",
+            "PDF Spec Sheet",
             to_pdf(pipe, pump, bom, system_label, vessel_name),
             f"ShipPipe_{system_key.replace(' ','_')}_{vessel_name.replace(' ','_')}.pdf",
             "application/pdf",
@@ -534,7 +529,7 @@ def render_system(system_key: str, system_label: str):
         )
 
 
-# ── Dashboard ──────────────────────────────────────────────────────────────────
+# -- Dashboard
 def render_dashboard():
     bg = T["chart_bg"]
     tc = T["text"]
@@ -572,14 +567,14 @@ def render_dashboard():
 
     if not results:
         st.markdown("<br>", unsafe_allow_html=True)
-        st.info("Open any system tab → set parameters → results appear here automatically.")
+        st.info("Open any system tab -> set parameters -> results appear here automatically.")
         st.markdown("---")
         tpl = io.BytesIO()
         tdf = pd.DataFrame({"Field":["Vessel Name","LOA (m)","DWT","Draft (m)"],
                              "Value":[vessel_name,vessel_loa,vessel_dwt,vessel_draft]})
         with pd.ExcelWriter(tpl, engine="openpyxl") as w:
             tdf.to_excel(w, sheet_name="Vessel Data", index=False)
-        st.download_button("📥 Download Vessel Template", tpl.getvalue(),
+        st.download_button("Download Vessel Template", tpl.getvalue(),
             "ShipPipe_VesselTemplate.xlsx",
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
         return
@@ -647,7 +642,7 @@ def render_dashboard():
         r = results[s]
         rows.append({
             "System": s,
-            "Flow (m³/h)": r["flow"],
+            "Flow (m3/h)": r["flow"],
             "Pipe Size": r["pipe"]["selected_nps"].split(" ")[0],
             "OD (mm)": r["pipe"]["OD_mm"],
             "ID (mm)": r["pipe"]["ID_mm"],
@@ -676,7 +671,7 @@ def render_dashboard():
                 pd.concat([pipe_df, pd.DataFrame([["",""]] * 2, columns=["Parameter","Value"]), pump_df])\
                   .to_excel(writer, sheet_name=f"{sheet}_Pipe_Pump", index=False)
                 r["bom"].to_excel(writer, sheet_name=f"{sheet}_BOM")
-        st.download_button("📥 All Systems Excel", all_xl.getvalue(),
+        st.download_button("All Systems Excel", all_xl.getvalue(),
             f"ShipPipe_ALL_{vessel_name.replace(' ','_')}.xlsx",
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             use_container_width=True)
@@ -687,7 +682,7 @@ def render_dashboard():
                               "Value":[vessel_name,vessel_loa,vessel_dwt,vessel_draft]})
         with pd.ExcelWriter(tpl2, engine="openpyxl") as w:
             tdf2.to_excel(w, sheet_name="Vessel Data", index=False)
-        st.download_button("📋 Vessel Template", tpl2.getvalue(),
+        st.download_button("Vessel Template", tpl2.getvalue(),
             "ShipPipe_VesselTemplate.xlsx",
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             use_container_width=True)
@@ -697,13 +692,13 @@ def render_dashboard():
         bom_xl  = io.BytesIO()
         with pd.ExcelWriter(bom_xl, engine="openpyxl") as w:
             bom_all.to_excel(w, sheet_name="Master BOM", index=False)
-        st.download_button("📦 Master BOM", bom_xl.getvalue(),
+        st.download_button("Master BOM", bom_xl.getvalue(),
             f"ShipPipe_MasterBOM_{vessel_name.replace(' ','_')}.xlsx",
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             use_container_width=True)
 
 
-# ── Page Header ────────────────────────────────────────────────────────────────
+# -- Page Header
 st.markdown(
     f'<div style="display:flex;align-items:center;gap:14px;padding:4px 0 10px;">'
     f'  {valve_svg(T["primary"], 46)}'
@@ -722,11 +717,11 @@ st.markdown(
 )
 
 
-# ── Tabs ───────────────────────────────────────────────────────────────────────
+# -- Tabs
 tabs = st.tabs([
-    "📊 Dashboard", "⚓ Ballast", "💧 Bilge", "🛢 FO HFO", "⛽ FO MDO",
-    "🔥 Fire & GS", "🚰 Fresh Water", "❄️ Cooling SW", "🌊 Cooling FW",
-    "⚙️ Lube Oil", "💠 Hydraulic", "💨 Comp. Air", "🚽 Sewage", "📋 About",
+    "Dashboard", "Ballast", "Bilge", "FO HFO", "FO MDO",
+    "Fire & GS", "Fresh Water", "Cooling SW", "Cooling FW",
+    "Lube Oil", "Hydraulic", "Comp. Air", "Sewage", "About",
 ])
 
 with tabs[0]:  render_dashboard()
@@ -769,11 +764,11 @@ with tabs[13]:
 | 12 | Sewage | Fresh Water | 0.6 - 2.0 m/s |
 
 ### Engineering References
-- Pipe schedules -- **ASME B36.10M**
-- Pressure drop -- **Darcy-Weisbach + Colebrook-White**
-- Fire & GS -- **SOLAS II-2**
-- Sewage -- **MARPOL Annex IV / ISO 8099**
-- Fuel oil systems -- **SOLAS II-2 Reg. 4**
+- Pipe schedules: **ASME B36.10M**
+- Pressure drop: **Darcy-Weisbach + Colebrook-White**
+- Fire & GS: **SOLAS II-2**
+- Sewage: **MARPOL Annex IV / ISO 8099**
+- Fuel oil systems: **SOLAS II-2 Reg. 4**
 
-[sujikumar.com](https://sujikumar.com) |  [LinkedIn](https://linkedin.com/in/sujikumar)
+[sujikumar.com](https://sujikumar.com) | [LinkedIn](https://linkedin.com/in/sujikumar)
     """)
