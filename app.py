@@ -22,7 +22,7 @@ from utils.systems_data import VELOCITY_RANGES, MATERIALS, recommended_schedule
 
 st.set_page_config(
     page_title="ShipPipe -- Marine Piping Designer",
-    page_icon="[V]",
+    page_icon="favicon.svg",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -336,13 +336,10 @@ header[data-testid="stHeader"] {{ display: none !important; }}
 [data-testid="stToolbarActions"] {{ display: none !important; }}
 [data-testid="stStatusWidget"] {{ display: none !important; }}
 button[data-testid="baseButton-header"] {{ display: none !important; }}
-/* Hide sidebar collapse/expand button */
+/* Hide sidebar COLLAPSE button only - keep expand visible */
 [data-testid="stSidebarCollapseButton"] {{ display: none !important; }}
-[data-testid="stSidebarCollapsedControl"] {{ display: none !important; }}
 button[aria-label="Collapse sidebar"] {{ display: none !important; }}
-button[aria-label="Expand sidebar"] {{ display: none !important; }}
 button[title="Collapse sidebar"] {{ display: none !important; }}
-button[title="Expand sidebar"] {{ display: none !important; }}
 </style>
 """, unsafe_allow_html=True)
 
