@@ -29,7 +29,11 @@ st.set_page_config(
 
 # -- Session State
 if "dark_mode" not in st.session_state:
-    st.session_state.dark_mode = True
+    # First visit follows the browser / device setting; the sidebar button overrides it.
+    try:
+        st.session_state.dark_mode = (st.context.theme.type == "dark")
+    except Exception:
+        st.session_state.dark_mode = False
 if "system_results" not in st.session_state:
     st.session_state.system_results = {}
 
@@ -49,47 +53,52 @@ def valve_svg(color: str, size: int = 52) -> str:
 
 # -- Theme
 def get_theme():
+    # sujikumar.com "Aurora" brand palette
     if st.session_state.dark_mode:
         return dict(
-            bg        = "#060d1a",
-            bg2       = "#0a1628",
-            card      = "#0d1f3c",
-            card2     = "#0f2545",
-            border    = "rgba(0,212,255,0.18)",
-            glow      = "rgba(0,212,255,0.08)",
-            primary   = "#00d4ff",
-            primary2  = "#0099cc",
-            text      = "#ffffff",
-            text2     = "#94b8d0",
-            muted     = "#4a7fa0",
-            success   = "#00e5a0",
-            danger    = "#ff4d6d",
-            sel_text  = "#060d1a",
-            chart_bg  = "#0a1628",
-            c1        = "#00d4ff",
-            c2        = "#00e5a0",
-            c3        = "#ff9f43",
+            bg        = "#07080D",
+            bg2       = "#0B0D13",
+            card      = "#0F1118",
+            card2     = "#0B0D13",
+            border    = "rgba(255,255,255,0.09)",
+            glow      = "rgba(0,0,0,0.45)",
+            primary   = "#A78BFA",
+            primary2  = "#8B5CF6",
+            ink       = "#F1F3F9",
+            text      = "#F1F3F9",
+            text2     = "#A1A8BA",
+            muted     = "#8189A0",
+            success   = "#4ADE80",
+            danger    = "#F87171",
+            sel_text  = "#07080D",
+            chart_bg  = "#0F1118",
+            grid      = "#1C2030",
+            c1        = "#60A5FA",
+            c2        = "#A78BFA",
+            c3        = "#FB923C",
             mode_btn  = "Light Mode",
         )
     return dict(
-        bg        = "#f4f8fc",
-        bg2       = "#e8f0f8",
-        card      = "#ffffff",
-        card2     = "#f0f6ff",
-        border    = "rgba(0,100,180,0.18)",
-        glow      = "rgba(0,100,180,0.04)",
-        primary   = "#0066cc",
-        primary2  = "#004fa3",
-        text      = "#0a0e1a",
-        text2     = "#3a5a7a",
-        muted     = "#6b8fa8",
-        success   = "#00875a",
-        danger    = "#cc1f3a",
-        sel_text  = "#ffffff",
-        chart_bg  = "#f0f6ff",
-        c1        = "#0066cc",
-        c2        = "#00875a",
-        c3        = "#d4600a",
+        bg        = "#FBFBFD",
+        bg2       = "#F3F4F8",
+        card      = "#FFFFFF",
+        card2     = "#F3F4F8",
+        border    = "#E5E7EF",
+        glow      = "rgba(10,11,18,0.06)",
+        primary   = "#6D28D9",
+        primary2  = "#7C3AED",
+        ink       = "#0A0B12",
+        text      = "#0A0B12",
+        text2     = "#4B5263",
+        muted     = "#6B7280",
+        success   = "#15803D",
+        danger    = "#B91C1C",
+        sel_text  = "#FFFFFF",
+        chart_bg  = "#FFFFFF",
+        grid      = "#E5E7EF",
+        c1        = "#2563EB",
+        c2        = "#7C3AED",
+        c3        = "#EA580C",
         mode_btn  = "Dark Mode",
     )
 
@@ -98,15 +107,16 @@ T = get_theme()
 # -- Global CSS
 st.markdown(f"""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+@font-face {{ font-family: 'Geist'; src: url('/app/static/geist.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }}
+@font-face {{ font-family: 'Geist Mono'; src: url('/app/static/geist-mono.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }}
 
 html, body, [class*="css"], .stApp, .stApp * {{
-  font-family: 'Inter', sans-serif !important;
+  font-family: 'Geist', system-ui, sans-serif !important;
   box-sizing: border-box;
 }}
 h1,h2,h3,h4,h5,h6,
 .stMarkdown h1,.stMarkdown h2,.stMarkdown h3 {{
-  font-family: 'Space Grotesk', sans-serif !important;
+  font-family: 'Geist', system-ui, sans-serif !important;
 }}
 
 .stApp {{ background: {T["bg"]} !important; }}
@@ -122,7 +132,7 @@ section[data-testid="stSidebar"] p,
 section[data-testid="stSidebar"] span,
 section[data-testid="stSidebar"] div {{
   color: {T["text"]} !important;
-  font-family: 'Inter', sans-serif !important;
+  font-family: 'Geist', system-ui, sans-serif !important;
 }}
 
 /* Tabs */
@@ -142,12 +152,12 @@ section[data-testid="stSidebar"] div {{
   color: {T["text2"]} !important;
   letter-spacing: 0.01em;
   transition: all 0.15s ease;
-  font-family: 'Space Grotesk', sans-serif !important;
+  font-family: 'Geist', system-ui, sans-serif !important;
 }}
 .stTabs [aria-selected="true"] {{
   background: linear-gradient(135deg, {T["primary"]}, {T["primary2"]}) !important;
   color: {T["sel_text"]} !important;
-  box-shadow: 0 2px 10px rgba(0,180,220,0.3);
+  box-shadow: 0 2px 10px rgba(124,58,237,0.3);
 }}
 .stTabs [data-baseweb="tab-panel"] {{ background: transparent !important; }}
 
@@ -159,7 +169,7 @@ input, select, textarea, .stSelectbox,
   border: 1px solid {T["border"]} !important;
   color: {T["text"]} !important;
   border-radius: 8px !important;
-  font-family: 'Inter', sans-serif !important;
+  font-family: 'Geist', system-ui, sans-serif !important;
 }}
 .stSlider [data-baseweb="slider"] {{ margin-top: 4px; }}
 
@@ -173,7 +183,7 @@ input, select, textarea, .stSelectbox,
 }}
 [data-testid="stMetricValue"] {{
   color: {T["primary"]} !important;
-  font-family: 'Space Grotesk', sans-serif !important;
+  font-family: 'Geist', system-ui, sans-serif !important;
   font-weight: 800 !important;
   font-size: 1.5rem !important;
 }}
@@ -181,7 +191,7 @@ input, select, textarea, .stSelectbox,
 /* Text */
 p, li, td, th, .stMarkdown, .stMarkdown p {{
   color: {T["text"]} !important;
-  font-family: 'Inter', sans-serif !important;
+  font-family: 'Geist', system-ui, sans-serif !important;
 }}
 h1,h2,h3,h4 {{ color: {T["text"]} !important; }}
 caption, .stCaption {{ color: {T["text2"]} !important; }}
@@ -191,7 +201,7 @@ caption, .stCaption {{ color: {T["text2"]} !important; }}
 .stDataFrame th {{
   background: {T["card2"]} !important;
   color: {T["primary"]} !important;
-  font-family: 'Space Grotesk', sans-serif !important;
+  font-family: 'Geist', system-ui, sans-serif !important;
   font-weight: 700 !important;
 }}
 .stDataFrame td {{ color: {T["text"]} !important; }}
@@ -205,12 +215,12 @@ caption, .stCaption {{ color: {T["text2"]} !important; }}
   font-weight: 700 !important;
   font-size: 0.82rem !important;
   padding: 8px 16px !important;
-  font-family: 'Space Grotesk', sans-serif !important;
-  box-shadow: 0 3px 12px rgba(0,180,220,0.25);
+  font-family: 'Geist', system-ui, sans-serif !important;
+  box-shadow: 0 3px 12px rgba(124,58,237,0.25);
   transition: all 0.15s ease;
 }}
 .stDownloadButton > button:hover {{
-  box-shadow: 0 5px 18px rgba(0,180,220,0.4) !important;
+  box-shadow: 0 5px 18px rgba(124,58,237,0.4) !important;
   transform: translateY(-1px);
 }}
 .stButton > button {{
@@ -219,7 +229,7 @@ caption, .stCaption {{ color: {T["text2"]} !important; }}
   border: 1.5px solid {T["primary"]} !important;
   border-radius: 9px !important;
   font-weight: 700 !important;
-  font-family: 'Space Grotesk', sans-serif !important;
+  font-family: 'Geist', system-ui, sans-serif !important;
   transition: all 0.15s ease;
 }}
 .stButton > button:hover {{
@@ -243,7 +253,7 @@ caption, .stCaption {{ color: {T["text2"]} !important; }}
   margin-bottom: 10px;
 }}
 .sp-section-title {{
-  font-family: 'Space Grotesk', sans-serif !important;
+  font-family: 'Geist', system-ui, sans-serif !important;
   font-size: 0.82rem;
   font-weight: 700;
   color: {T["primary"]};
@@ -263,11 +273,12 @@ caption, .stCaption {{ color: {T["text2"]} !important; }}
   box-shadow: 0 4px 20px {T["glow"]};
   transition: box-shadow 0.2s;
 }}
-.sp-kpi:hover {{ box-shadow: 0 6px 28px rgba(0,180,220,0.2); }}
+.sp-kpi:hover {{ box-shadow: 0 6px 28px rgba(124,58,237,0.2); }}
 .sp-kpi-num {{
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 2.2rem;
-  font-weight: 900;
+  font-family: 'Geist Mono', monospace;
+  font-size: 2.1rem;
+  font-weight: 600;
+  letter-spacing: -0.04em;
   color: {T["primary"]};
   line-height: 1.1;
 }}
@@ -320,14 +331,14 @@ header[data-testid="stHeader"] {{ display: none !important; }}
     border: none !important;
     border-radius: 6px !important;
     padding: 5px 14px !important;
-    font-family: 'Space Grotesk', sans-serif !important;
+    font-family: 'Geist', system-ui, sans-serif !important;
     min-width: 90px !important;
 }}
 [data-testid="stFileUploaderDropzone"] button::after {{
     content: "Browse File";
     font-size: 0.76rem;
     font-weight: 700;
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Geist', system-ui, sans-serif;
     color: {T["sel_text"]};
     display: block !important;
 }}
@@ -340,6 +351,44 @@ button[data-testid="baseButton-header"] {{ display: none !important; }}
 [data-testid="stSidebarCollapseButton"] {{ display: none !important; }}
 button[aria-label="Collapse sidebar"] {{ display: none !important; }}
 button[title="Collapse sidebar"] {{ display: none !important; }}
+
+/* ── Aurora layer: pill buttons, readable in both modes ── */
+.stButton > button, .stDownloadButton > button {{
+  background: {T["ink"]} !important; color: {T["bg"]} !important; border: 1px solid {T["ink"]} !important;
+  border-radius: 999px !important; box-shadow: none !important;
+}}
+.stButton > button *, .stDownloadButton > button *,
+section[data-testid="stSidebar"] .stButton > button, section[data-testid="stSidebar"] .stButton > button * {{ color: {T["bg"]} !important; }}
+.stButton > button:hover, .stDownloadButton > button:hover {{
+  background: {T["ink"]} !important; transform: translateY(-1px);
+  box-shadow: 0 0 0 1px rgba(124,58,237,.4), 0 10px 30px -8px {T["primary2"]}, 0 6px 20px -10px #0891B2 !important;
+}}
+input, select, textarea, [data-testid="stNumberInput"] input, [data-testid="stTextInput"] input {{ border-radius: 12px !important; }}
+.stTabs [aria-selected="true"] {{ background: {T["ink"]} !important; color: {T["bg"]} !important; box-shadow: none !important; }}
+.stTabs [aria-selected="true"] * {{ color: {T["bg"]} !important; }}
+.sp-kpi {{ border-top: 0; border-radius: 18px; position: relative; overflow: hidden; }}
+.sp-kpi::before {{ content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; background: linear-gradient(90deg, #0891B2, #2563EB, #7C3AED, #DB2777); }}
+.sp-kpi-num {{ color: {T["ink"]} !important; }}
+.sp-section-title {{ font-family: 'Geist Mono', monospace !important; font-weight: 500; color: {T["muted"]}; border-left: 3px solid {T["primary"]}; }}
+.sp-table-wrap {{ overflow: auto; border: 1px solid {T["border"]}; border-radius: 14px; background: {T["card"]}; margin-bottom: 14px; }}
+.sp-table-wrap table {{ width: 100%; border-collapse: collapse; font-size: 0.82rem; }}
+.sp-table-wrap th {{ position: sticky; top: 0; background: {T["card2"]} !important; color: {T["text2"]} !important; font-family: 'Geist Mono', monospace !important; font-weight: 500 !important; font-size: 0.72rem; text-transform: uppercase; letter-spacing: .04em; text-align: left; padding: 9px 12px; border-bottom: 1px solid {T["border"]}; white-space: nowrap; }}
+.sp-table-wrap td {{ padding: 8px 12px; border-bottom: 1px solid {T["border"]}; white-space: nowrap; color: {T["text"]} !important; }}
+.sp-table-wrap tr:last-child td {{ border-bottom: 0; }}
+.sp-table-wrap td.num {{ font-family: 'Geist Mono', monospace !important; text-align: right; }}
+.sp-credit {{ display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px 5px 5px; border-radius: 999px; border: 1px solid {T["border"]}; background: {T["card"]}; font-size: 0.75rem; color: {T["text2"]} !important; text-decoration: none !important; }}
+.sp-credit img {{ width: 20px; height: 20px; border-radius: 5px; }}
+.sp-credit b {{ color: {T["text"]} !important; }}
+/* Mobile */
+@media (max-width: 640px) {{
+  .block-container {{ padding-left: 0.8rem !important; padding-right: 0.8rem !important; }}
+  .stTabs [data-baseweb="tab-list"] {{ overflow-x: auto; flex-wrap: nowrap; scrollbar-width: none; }}
+  .stTabs [data-baseweb="tab"] {{ padding: 6px 11px !important; white-space: nowrap; }}
+  .sp-kpi {{ padding: 12px 8px; }}
+  .sp-kpi-num {{ font-size: 1.6rem; }}
+  [data-testid="stHorizontalBlock"] {{ flex-wrap: wrap; }}
+  [data-testid="stHorizontalBlock"] > [data-testid="stColumn"], [data-testid="stHorizontalBlock"] > [data-testid="column"] {{ min-width: calc(50% - 0.5rem) !important; }}
+}}
 </style>
 """, unsafe_allow_html=True)
 
@@ -348,10 +397,10 @@ button[title="Collapse sidebar"] {{ display: none !important; }}
 with st.sidebar:
     st.markdown(
         f'<div style="display:flex;align-items:center;gap:12px;padding:8px 0 4px;">'
-        f'  {valve_svg(T["primary"], 44)}'
+        f'  <img src="/app/static/ss-emblem.svg" width="44" height="44" alt="SS emblem" style="border-radius:12px;display:block;">'
         f'  <div>'
-        f'    <div style="font-family:Space Grotesk,sans-serif;font-size:1.35rem;font-weight:800;'
-        f'         color:{T["primary"]};line-height:1.1;">ShipPipe</div>'
+        f'    <div style="font-family:Geist,system-ui,sans-serif;font-size:1.35rem;font-weight:650;letter-spacing:-0.03em;'
+        f'         color:{T["ink"]};line-height:1.1;">ShipPipe</div>'
         f'    <div style="font-size:0.68rem;color:{T["muted"]};letter-spacing:0.06em;'
         f'         text-transform:uppercase;font-weight:600;">Marine Piping Designer</div>'
         f'  </div>'
@@ -365,7 +414,7 @@ with st.sidebar:
         st.session_state.dark_mode = not st.session_state.dark_mode
         st.rerun()
 
-    st.markdown(f'<div style="font-family:Space Grotesk,sans-serif;font-size:0.75rem;font-weight:700;'
+    st.markdown(f'<div style="font-family:Geist,system-ui,sans-serif;font-size:0.75rem;font-weight:700;'
                 f'color:{T["muted"]};text-transform:uppercase;letter-spacing:0.07em;'
                 f'margin:16px 0 6px;">Vessel / Project</div>', unsafe_allow_html=True)
     vessel_name  = st.text_input("Vessel Name",   value="MV Example",  label_visibility="collapsed")
@@ -373,13 +422,13 @@ with st.sidebar:
     vessel_dwt   = st.number_input("DWT",           500, 200000, 5000,  500)
     vessel_draft = st.number_input("Draft (m)",     2.0,  25.0,  6.5,   0.5)
 
-    st.markdown(f'<div style="font-family:Space Grotesk,sans-serif;font-size:0.75rem;font-weight:700;'
+    st.markdown(f'<div style="font-family:Geist,system-ui,sans-serif;font-size:0.75rem;font-weight:700;'
                 f'color:{T["muted"]};text-transform:uppercase;letter-spacing:0.07em;'
                 f'margin:16px 0 6px;">Settings</div>', unsafe_allow_html=True)
     default_schedule = st.selectbox("Schedule", ["SCH 40","SCH 80","SCH 160"])
     pump_efficiency  = st.slider("Pump n (%)", 60, 85, 72) / 100
 
-    st.markdown(f'<div style="font-family:Space Grotesk,sans-serif;font-size:0.75rem;font-weight:700;'
+    st.markdown(f'<div style="font-family:Geist,system-ui,sans-serif;font-size:0.75rem;font-weight:700;'
                 f'color:{T["muted"]};text-transform:uppercase;letter-spacing:0.07em;'
                 f'margin:16px 0 6px;">Import Template</div>', unsafe_allow_html=True)
     uploaded = st.file_uploader("Vessel template (.xlsx)", type=["xlsx"])
@@ -397,12 +446,30 @@ with st.sidebar:
     st.markdown(f'<div style="height:1px;background:{T["border"]};margin:14px 0 10px;"></div>',
                 unsafe_allow_html=True)
     st.markdown(
-        f'<div style="font-size:0.72rem;color:{T["muted"]};text-align:center;">'
-        f'Built by <a href="https://sujikumar.com" style="color:{T["primary"]};'
-        f'text-decoration:none;font-weight:600;">Suji Kumar C</a></div>',
+        f'<div style="text-align:center;"><a class="sp-credit" href="https://sujikumar.com/" rel="author" '
+        f'title="Built by Suji Kumar C — Digital Maritime Engineer"><img src="/app/static/ss-emblem.svg" alt="">'
+        f'<span>Built by <b>Suji Kumar C</b> · sujikumar.com</span></a></div>',
         unsafe_allow_html=True
     )
 
+
+
+# -- Themed table (follows the light/dark toggle, scrolls sideways on phones)
+def themed_table(df, max_height=None, index=True):
+    import html as _html
+    d = df.copy()
+    cols = ([d.index.name or ""] if index else []) + [str(c) for c in d.columns]
+    head = "".join(f"<th>{_html.escape(c)}</th>" for c in cols)
+    body = []
+    for idx, row in d.iterrows():
+        cells = [f"<td>{_html.escape(str(idx))}</td>"] if index else []
+        for v in row:
+            num = isinstance(v, (int, float)) and not isinstance(v, bool)
+            cells.append(f'<td class="num">{v}</td>' if num else f"<td>{_html.escape(str(v))}</td>")
+        body.append("<tr>" + "".join(cells) + "</tr>")
+    style = f' style="max-height:{max_height}px"' if max_height else ""
+    st.markdown(f'<div class="sp-table-wrap"{style}><table><thead><tr>{head}</tr></thead>'
+                f'<tbody>{"".join(body)}</tbody></table></div>', unsafe_allow_html=True)
 
 # -- Velocity Gauge
 def velocity_gauge(v_actual, v_min, v_max, v_rec):
@@ -411,11 +478,11 @@ def velocity_gauge(v_actual, v_min, v_max, v_rec):
     fig, ax = plt.subplots(figsize=(4.5, 0.6))
     fig.patch.set_facecolor(bg); ax.set_facecolor(bg)
     ax.barh(0, v_max*1.25, height=0.45,
-            color="#0d1f3c" if st.session_state.dark_mode else "#dce8f5", left=0)
+            color=T["grid"], left=0)
     ax.barh(0, v_max-v_min, height=0.45, color=T["success"], left=v_min, alpha=0.28)
     color = T["primary"] if v_min<=v_actual<=v_max else T["danger"]
     ax.barh(0, v_actual, height=0.45, color=color, alpha=0.9)
-    ax.axvline(v_rec, color="#ffffff" if st.session_state.dark_mode else "#333",
+    ax.axvline(v_rec, color=T["ink"],
                linewidth=1.6, linestyle="--", alpha=0.7)
     ax.set_xlim(0, v_max*1.25); ax.set_yticks([])
     ax.tick_params(axis="x", colors=T["text2"], labelsize=7)
@@ -436,7 +503,7 @@ def render_system(system_key: str, system_label: str):
     if system_key == "Sewage":                    default_flow = 5.0
 
     st.markdown(
-        f'<div style="font-family:Space Grotesk,sans-serif;font-size:1.45rem;font-weight:800;'
+        f'<div style="font-family:Geist,system-ui,sans-serif;font-size:1.45rem;font-weight:800;'
         f'color:{T["primary"]};margin:4px 0 16px;letter-spacing:-0.01em;">'
         f'{system_label} System</div>',
         unsafe_allow_html=True
@@ -523,7 +590,7 @@ def render_system(system_key: str, system_label: str):
             st.warning(pump["note"])
 
     st.markdown('<div class="sp-section-title">Bill of Materials</div>', unsafe_allow_html=True)
-    st.dataframe(bom, use_container_width=True, height=280)
+    themed_table(bom, max_height=280)
 
     st.markdown('<div class="sp-section-title">Export</div>', unsafe_allow_html=True)
     ec1, ec2 = st.columns(2)
@@ -551,7 +618,7 @@ def render_dashboard():
     tc = T["text"]
 
     st.markdown(
-        f'<div style="font-family:Space Grotesk,sans-serif;font-size:1.45rem;font-weight:800;'
+        f'<div style="font-family:Geist,system-ui,sans-serif;font-size:1.45rem;font-weight:800;'
         f'color:{T["primary"]};margin:4px 0 4px;letter-spacing:-0.01em;">Project Dashboard</div>',
         unsafe_allow_html=True
     )
@@ -630,8 +697,8 @@ def render_dashboard():
         st.markdown('<div class="sp-section-title">BOM Items by System</div>', unsafe_allow_html=True)
         bom_counts = [len(results[s]["bom"]) for s in systems]
         fig3, ax3 = make_fig(4.2, 3.2)
-        palette = [T["c1"],T["c2"],T["c3"],"#a78bfa","#fb923c",
-                   "#34d399","#60a5fa","#f472b6","#facc15","#4ade80","#38bdf8","#c084fc"]
+        palette = ["#2563EB","#7C3AED","#DB2777","#0891B2","#EA580C",
+                   "#60A5FA","#A78BFA","#F472B6","#22D3EE","#FB923C","#15803D","#4ADE80"]
         wedges, texts, autotexts = ax3.pie(
             bom_counts, labels=labels, autopct="%1.0f%%",
             colors=palette[:len(systems)],
@@ -639,7 +706,7 @@ def render_dashboard():
             wedgeprops={"edgecolor": bg, "linewidth": 1.8}
         )
         for at in autotexts:
-            at.set_fontsize(7); at.set_color("#060d1a")
+            at.set_fontsize(7); at.set_color("#FFFFFF")
         plt.tight_layout(); st.pyplot(fig3, use_container_width=True)
 
     with ch4:
@@ -669,7 +736,7 @@ def render_dashboard():
             "Motor (kW)": r["pump"]["recommended_motor_kw"],
             "BOM": len(r["bom"]),
         })
-    st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+    themed_table(pd.DataFrame(rows), index=False)
 
     st.markdown("---")
     st.markdown('<div class="sp-section-title">Bulk Export</div>', unsafe_allow_html=True)
@@ -719,7 +786,7 @@ st.markdown(
     f'<div style="display:flex;align-items:center;gap:14px;padding:4px 0 10px;">'
     f'  {valve_svg(T["primary"], 46)}'
     f'  <div>'
-    f'    <div style="font-family:Space Grotesk,sans-serif;font-size:1.75rem;font-weight:900;'
+    f'    <div style="font-family:Geist,system-ui,sans-serif;font-size:1.75rem;font-weight:900;'
     f'         color:{T["primary"]};line-height:1.1;letter-spacing:-0.02em;">ShipPipe</div>'
     f'    <div style="font-size:0.8rem;color:{T["text2"]};margin-top:2px;letter-spacing:0.01em;">'
     f'      Marine Piping System Designer &nbsp;·&nbsp; 12 Systems &nbsp;·&nbsp; '
@@ -756,7 +823,7 @@ with tabs[12]: render_system("Sewage",         "Sewage")
 
 with tabs[13]:
     st.markdown(
-        f'<div style="font-family:Space Grotesk,sans-serif;font-size:1.45rem;font-weight:800;'
+        f'<div style="font-family:Geist,system-ui,sans-serif;font-size:1.45rem;font-weight:800;'
         f'color:{T["primary"]};margin-bottom:12px;">About ShipPipe</div>',
         unsafe_allow_html=True
     )

@@ -1,7 +1,16 @@
-[theme]
-base = "dark"
-primaryColor = "#00bcd4"
-backgroundColor = "#0a1a1a"
-secondaryBackgroundColor = "#0d2424"
-textColor = "#ffffff"
-font = "sans serif"
+# sujikumar.com "Aurora" brand. No fixed base: Streamlit follows the visitor's
+# browser/device setting (light or dark); the app's own toggle restyles the page.
+[theme.light]
+primaryColor = "#6D28D9"
+backgroundColor = "#FBFBFD"
+secondaryBackgroundColor = "#F3F4F8"
+textColor = "#0A0B12"
+
+[theme.dark]
+primaryColor = "#A78BFA"
+backgroundColor = "#07080D"
+secondaryBackgroundColor = "#0F1118"
+textColor = "#F1F3F9"
+
+[server]
+enableStaticServing = true
