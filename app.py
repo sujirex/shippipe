@@ -104,11 +104,17 @@ def get_theme():
 
 T = get_theme()
 
+# SS emblem inlined as a data URI (Streamlit Cloud serves the app under /~/+/, so absolute static paths break)
+import base64 as _b64
+_EMB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'ss-emblem.svg')
+with open(_EMB_PATH, 'rb') as _f:
+    SS_EMBLEM = 'data:image/svg+xml;base64,' + _b64.b64encode(_f.read()).decode()
+
 # -- Global CSS
 st.markdown(f"""
 <style>
-@font-face {{ font-family: 'Geist'; src: url('/app/static/geist.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }}
-@font-face {{ font-family: 'Geist Mono'; src: url('/app/static/geist-mono.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }}
+@font-face {{ font-family: 'Geist'; src: url('app/static/geist.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }}
+@font-face {{ font-family: 'Geist Mono'; src: url('app/static/geist-mono.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }}
 
 html, body, [class*="css"], .stApp, .stApp * {{
   font-family: 'Geist', system-ui, sans-serif !important;
@@ -397,7 +403,7 @@ input, select, textarea, [data-testid="stNumberInput"] input, [data-testid="stTe
 with st.sidebar:
     st.markdown(
         f'<div style="display:flex;align-items:center;gap:12px;padding:8px 0 4px;">'
-        f'  <img src="/app/static/ss-emblem.svg" width="44" height="44" alt="SS emblem" style="border-radius:12px;display:block;">'
+        f'  <img src="{SS_EMBLEM}" width="44" height="44" alt="SS emblem" style="border-radius:12px;display:block;">'
         f'  <div>'
         f'    <div style="font-family:Geist,system-ui,sans-serif;font-size:1.35rem;font-weight:650;letter-spacing:-0.03em;'
         f'         color:{T["ink"]};line-height:1.1;">ShipPipe</div>'
@@ -447,7 +453,7 @@ with st.sidebar:
                 unsafe_allow_html=True)
     st.markdown(
         f'<div style="text-align:center;"><a class="sp-credit" href="https://sujikumar.com/" rel="author" '
-        f'title="Built by Suji Kumar C — Digital Maritime Engineer"><img src="/app/static/ss-emblem.svg" alt="">'
+        f'title="Built by Suji Kumar C — Digital Maritime Engineer"><img src="{SS_EMBLEM}" alt="">'
         f'<span>Built by <b>Suji Kumar C</b> · sujikumar.com</span></a></div>',
         unsafe_allow_html=True
     )
